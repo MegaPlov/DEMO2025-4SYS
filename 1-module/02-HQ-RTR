@@ -1,0 +1,132 @@
+==========HQ-RTR==========
+admin/admin
+
+https://www.rdp.ru/doc/ED/ER_UserGuide.pdf
+
+-------имя хоста---------
+
+ecorouter>en
+ecorouter#configure terminal
+ecorouter(config)#hostname HQ-RTR.au-team.irpo
+HQ-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
+
+-------настройка NTP/DNS---------
+
+	(config)#ip name-server 192.168.1.10
+	(config)#ntp timezone utc+3
+
+-------настройка УЗ net_admin---------3.3 Создание учетных записей пользователей
+
+	(config)#username net_admin
+	(config-user)#password P@$$word 
+	(config-user)#role admin
+	(config-user)#exit
+
+-------пул DHCP---------
+
+	(config)#ip pool dhcp 1
+	(config-ip-pool)# range 192.168.2.2-192.168.2.9
+	(config-ip-pool)#exit
+
+-------настройка параметров DHCP сервера---------8.3 Настройка DHCP-сервера
+
+	(config)#dhcp-server 1
+	(config-dhcp-server)#pool dhcp 64
+	(config-dhcp-server-pool)#mask 255.255.255.240
+	(config-dhcp-server-pool)#gateway 192.168.2.1
+	(config-dhcp-server-pool)#dns 192.168.1.10
+	(config-dhcp-server-pool)#domain-name au-team.irpo
+	(config-dhcp-server-pool)#static ip 192.168.2.10
+	(config-dhcp-server-static)#client-id mac 1111.1111.1111
+	(config-dhcp-server-static)#exit
+	(config-dhcp-server)#exit
+
+-------настройка внешнего интерфейса-------4.9 Service Instance
+
+	(config)#port te0
+	(config-port)#service-instance te0/isp-hq
+	(config-service-instance)#encapsulation untagged
+	(config-service-instance)#exit
+	(config-port)#exit
+
+-------настройка Service Instance---------
+
+	(config)#port te1
+	(config-port)#service-instance te1/srv-net
+	(config-service-instance)#encapsulation dot1q 100
+	(config-service-instance)#rewrite pop 1
+	(config-service-instance)#service-instance te1/cli-net
+	(config-service-instance)#encapsulation dot1q 200
+	(config-service-instance)#rewrite pop 1
+	(config-service-instance)#service-instance te1/management
+	(config-service-instance)#encapsulation dot1q 999
+	(config-service-instance)#rewrite pop 1
+	(config-service-instance)#exit
+	(config-port)#exit
+
+-------настройка адресации интерфейсов-------------
+
+	(config)#interface isp-hq
+	(config-if)#ip nat outside
+	(config-if)#ip address 172.16.4.4/28
+	(config-if)#connect port te0 service-instance te0/isp-hq
+	(config-if)#exit
+
+	(config)#interface srv-net
+	(config-if)#ip nat inside
+	(config-if)#ip address 192.168.1.1/26
+	(config-if)#connect port te1 service-instance te1/srv-net
+	(config-if)#exit
+	
+	(config)#interface cli-net
+	(config-if)#ip nat inside
+	(config-if)#ip address 192.168.2.1/28
+	(config-if)#connect port te1 service-instance te1/cli-net
+
+	(config-if)#exit
+	(config)#interface management
+	(config-if)#ip address 192.168.99.1/29
+	(config-if)#connect port te1 service-instance te1/management
+	(config-if)#exit
+	(config)#
+
+-------настройка NAT---------28 Встроенный NAT
+
+	(config)#ip nat pool nat 192.168.1.1-192.168.2.254,192.168.99.1-192.168.99.254
+	(config)#ip nat source dynamic inside-to-outside pool nat overload interface isp-hq
+
+-------настройка маршрута по умолчанию---------13.4.4 Маршрут по умолчанию
+
+	(config)#ip route 0.0.0.0/0 172.16.4.1 description default
+
+-------настройка туннеля GRE---------15.1 GRE
+
+	(config)#interface tunnel.1
+	(config-if-tunnel)#ip add 192.168.5.1/30
+	(config-if-tunnel)#ip tunnel 172.16.4.4 172.16.5.5 mode gre
+	(config-if-tunnel)#ip ospf authentication
+	(config-if-tunnel)#ip ospf authentication-key P@$$word
+	(config-if-tunnel)#exit
+
+-------настройка OSPF---------13.4 Настройка OSPF
+
+	(config)#router ospf 1
+	(config-router)#network 192.168.5.0/30 area 0
+	(config-router)#network 192.168.1.0/26 area 0
+	(config-router)#network 192.168.2.0/28 area 0
+	(config-router)#network 192.168.99.0/29 area 0
+	(config-router)#passive-interface default
+	(config-router)#no passive-interface tunnel.1
+	(config-router)#exit
+	(config)#exit
+
+-------запись конфигурации---------
+
+HQ-RTR.au-team.irpo#write 
+
+-------команды проверки---------
+
+HQ-RTR.au-team.irpo#show ip interface brief
+HQ-RTR.au-team.irpo#show port brief 
+HQ-RTR.au-team.irpo#sh ip route
+HQ-RTR.au-team.irpo#sh running-config 
