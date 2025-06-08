@@ -16,7 +16,6 @@ echo '172.16.4.1/28' > /etc/net/ifaces/ens19/ipv4address
 echo '172.16.5.1/28' > /etc/net/ifaces/ens20/ipv4address
 
 -------настройка NAT---------
-НЕ
 apt-get update && apt-get install nftables -y
 vim /etc/nftables/nftables.nft
 
