@@ -81,12 +81,5 @@ echo "Authorized access only" > /etc/openssh/banner
 Баннер		
 	#Banner none ---> Banner /etc/openssh/banner
 	
-	+++++++ИЛИ++++++++++++
-
-Port 2024
-MaxAuthTries 2
-AllowUsers sshuser 
-Banner /etc/openssh/banner
-
 		++++++++++
 systemctl restart sshd
