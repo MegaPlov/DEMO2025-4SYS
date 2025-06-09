@@ -1,0 +1,24 @@
+admin/admin
+
+-------проброс портов---------28.1  NAT port forwarding 
+
+==========HQ-RTR==========
+
+	(config)#ip nat source static tcp 192.168.1.10 3015 172.16.40.4 3015
+  (config)#ip nat source static tcp 192.168.1.10 80 172.16.40.4 80
+
+==========BR-RTR==========
+
+	(config)#ip nat source static tcp 192.168.3.10 8085 172.16.50.5 80
+	(config)#ip nat source static tcp 192.168.3.10 3015 172.16.50.5 3015
+
+
+-------настройка NTP клиентов---------29.1  Базовая настройка NTP
+
+==========HQ-RTR==========
+
+	(config)#ntp server 172.16.40.1
+
+==========BR-RTR==========
+
+	(config)#ntp server 172.16.50.1
