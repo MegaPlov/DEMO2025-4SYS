@@ -15,7 +15,7 @@ service network restart
 
 -------настройка sshuser-------------
 
-useradd -u 1015 sshuser
+useradd -u 1010 sshuser
 passwd sshuser                 (P@SSw0rd)
 usermod -aG wheel sshuser
 vim /etc/sudoers
@@ -33,7 +33,7 @@ echo "Authorized access only" > /etc/openssh/banner
 +++++sshd_config++++++++++
 
 Задать "нестандартный" порт
-    Port 3015
+    Port 3010
 
 Разрешите подключения только пользователю sshuser
 	AllowUsers sshuser
