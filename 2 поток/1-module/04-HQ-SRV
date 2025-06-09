@@ -7,7 +7,7 @@ timedatectl set-timezone Europe/Moscow
 -------настройка интерфейсов-------------
 
 echo 'TYPE=eth' > /etc/net/ifaces/ens18/options
-echo '192.168.1.10/28' > /etc/net/ifaces/ens18/ipv4address
+echo '192.168.1.10/27' > /etc/net/ifaces/ens18/ipv4address
 echo 'default via 192.168.1.1' > /etc/net/ifaces/ens18/ipv4route
 echo 'nameserver 1.1.1.1' > /etc/net/ifaces/ens18/resolv.conf
 systemctl restart network
@@ -53,7 +53,7 @@ service network restart
 
 -------настройка sshuser-------------
 
-useradd -u 1015 sshuser
+useradd -u 1010 sshuser
 passwd sshuser #P@ssw0rd
 usermod -aG wheel sshuser
 vim /etc/sudoers
@@ -70,7 +70,7 @@ echo "Authorized access only" > /etc/openssh/banner
 
 
 Задать "нестандартный" порт
-    Port 3015
+    Port 3010
 
 Разрешите подключения только пользователю sshuser
 	AllowUsers sshuser
