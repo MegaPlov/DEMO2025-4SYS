@@ -74,7 +74,7 @@ HQ-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
 
 	(config)#interface srv-net
 	(config-if)#ip nat inside
-	(config-if)#ip address 192.168.1.1/28
+	(config-if)#ip address 192.168.1.1/27
 	(config-if)#connect port te1 service-instance te1/srv-net
 	(config-if)#exit
 	
@@ -112,7 +112,7 @@ HQ-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
 
 	(config)#router ospf 1
 	(config-router)#network 192.168.5.0/30 area 0
-	(config-router)#network 192.168.1.0/28 area 0
+	(config-router)#network 192.168.1.0/27 area 0
 	(config-router)#network 192.168.2.0/27 area 0
 	(config-router)#network 192.168.99.0/29 area 0
 	(config-router)#passive-interface default
