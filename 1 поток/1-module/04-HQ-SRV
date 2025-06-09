@@ -42,8 +42,8 @@ host-record=hq-rtr.au-team.irpo,192.168.1.1
 host-record=hq-srv.au-team.irpo,192.168.1.10
 host-record=hq-cli.au-team.irpo,192.168.2.10
 
-cname=moodle.au-team.irpo,hq-rtr.au-team.irpo
-cname=wiki.au-team.irpo,hq-rtr.au-team.irpo
+address=/moodle.au-team.irpo/172.16.40.1
+address=/wiki.au-team.irpo/172.16.50.1
 
 		++++++++++
 		
