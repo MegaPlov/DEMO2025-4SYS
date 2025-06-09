@@ -12,8 +12,8 @@ mkdir -p /etc/net/ifaces/ens20
 echo 'TYPE=eth' > /etc/net/ifaces/ens19/options
 echo 'TYPE=eth' > /etc/net/ifaces/ens20/options
 
-echo '172.16.4.1/28' > /etc/net/ifaces/ens19/ipv4address
-echo '172.16.5.1/28' > /etc/net/ifaces/ens20/ipv4address
+echo '172.16.40.1/28' > /etc/net/ifaces/ens19/ipv4address
+echo '172.16.50.1/28' > /etc/net/ifaces/ens20/ipv4address
 
 -------настройка NAT---------
 apt-get update && apt-get install nftables -y
