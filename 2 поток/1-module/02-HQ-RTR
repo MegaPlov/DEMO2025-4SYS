@@ -53,10 +53,10 @@ HQ-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
 
 	(config)#port te1
 	(config-port)#service-instance te1/srv-net
-	(config-service-instance)#encapsulation dot1q 10
+	(config-service-instance)#encapsulation dot1q 15
 	(config-service-instance)#rewrite pop 1
 	(config-service-instance)#service-instance te1/cli-net
-	(config-service-instance)#encapsulation dot1q 20
+	(config-service-instance)#encapsulation dot1q 25
 	(config-service-instance)#rewrite pop 1
 	(config-service-instance)#service-instance te1/management
 	(config-service-instance)#encapsulation dot1q 99
