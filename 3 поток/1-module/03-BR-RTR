@@ -1,0 +1,88 @@
+==========BR-RTR==========
+admin/admin
+
+https://www.rdp.ru/doc/ED/ER_UserGuide.pdf
+
+-------имя хоста---------
+
+ecorouter>en
+ecorouter#configure terminal
+ecorouter(config)#hostname BR-RTR.au-team.irpo
+BR-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
+
+-------настройка NTP/DNS---------
+
+	(config)#ip name-server 192.168.1.10
+	(config)#ntp timezone utc+3
+
+-------настройка УЗ net_admin---------3.3 Создание учетных записей пользователей
+
+	(config)#username net_admin
+	(config-user)#password P@$$word 
+	(config-user)#role admin
+	(config-user)#exit
+
+-------настройка Service Instance-------4.9 Service Instance
+
+	(config)#port te0
+	(config-port)#service-instance te0/isp-br
+	(config-service-instance)#encapsulation untagged  
+	(config-service-instance)#exit
+	(config-port)#exit
+
+	(config)#port te1
+	(config-port)#service-instance te1/br-net
+	(config-service-instance)#encapsulation untagged	
+	(config-service-instance)#exit
+	(config-port)#exit
+	
+-------настройка адресации интерфейсов-------------
+
+	(config)#interface isp-br
+	(config-if)#ip nat outside
+	(config-if)#ip address 172.16.50.5/28
+	(config-if)#connect port te0 service-instance te0/isp-br
+	(config-if)#exit
+
+	(config)#interface br-net
+	(config-if)# ip nat inside
+	(config-if)#ip address 192.168.3.1/27
+	(config-if)# connect port te1 service-instance te1/br-net
+
+
+-------настройка NAT---------28 Встроенный NAT
+
+	(config)#ip nat pool nat 192.168.3.1-192.168.3.254
+	(config)#ip nat source dynamic inside-to-outside pool nat overload interface isp-br
+
+
+-------настройка маршрута по умолчанию---------13.4.4 Маршрут по умолчанию
+
+	(config)#ip route 0.0.0.0/0 172.16.50.1 description default
+
+-------настройка туннеля GRE---------15.1 GRE
+
+	(config)#interface tunnel.1
+	(config-if-tunnel)#ip add 192.168.5.2/30
+	(config-if-tunnel)#ip tunnel 172.16.50.5 172.16.40.4 mode gre
+	(config-if-tunnel)#ip ospf authentication
+	(config-if-tunnel)#ip ospf authentication-key P@$$word
+	(config-if-tunnel)#exit
+
+-------настройка OSPF---------13.4 Настройка OSPF
+
+	(config)#router ospf 1
+	(config-router)#network 192.168.5.0/30 area 0
+	(config-router)#network 192.168.3.0/27 area 0
+	(config-router)#passive-interface default
+	(config-router)#no passive-interface tunnel.1
+	(config-router)#exit
+	(config)#exit
+
+-------команды проверки---------
+
+HQ-RTR.au-team.irpo#write 
+HQ-RTR.au-team.irpo#show ip interface brief
+HQ-RTR.au-team.irpo#show port brief 
+HQ-RTR.au-team.irpo#sh ip route
+HQ-RTR.au-team.irpo#sh running-config 
