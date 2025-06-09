@@ -1,0 +1,48 @@
+==========BR-SRV==========
+root/toor
+
+-------имя хоста/NTP---------
+hostnamectl hostname BR-SRV.au-team.irpo; exec bash
+timedatectl set-timezone Europe/Moscow
+
+-------настройка интерфейсов-------------
+
+echo 'TYPE=eth' > /etc/net/ifaces/ens18/options
+echo '192.168.3.10/27' > /etc/net/ifaces/ens18/ipv4address
+echo 'default via 192.168.3.1' > /etc/net/ifaces/ens18/ipv4route
+echo 'nameserver 192.168.1.10' > /etc/net/ifaces/ens18/resolv.conf
+service network restart
+
+-------настройка sshuser-------------
+
+useradd -u 1010 sshuser
+passwd sshuser                 (P@SSw0rd)
+usermod -aG wheel sshuser
+vim /etc/sudoers
+	WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL
+
+--------настройка SSH----------------
+
+https://www.altlinux.org/%D0%94%D0%BE%D1%81%D1%82%D1%83%D0%BF_%D0%BF%D0%BE_SSH#%D0%94%D0%BE%D1%81%D1%82%D1%83%D0%BF_%D0%BF%D0%BE_SSH_%D1%87%D0%B5%D1%80%D0%B5%D0%B7_%D1%81%D0%B5%D1%82%D1%8C
+
+echo "Authorized access only" > /etc/openssh/banner
+
+в файле /etc/openssh/sshd_config
+
+
++++++sshd_config++++++++++
+
+Задать "нестандартный" порт
+    Port 2024
+
+Разрешите подключения только пользователю sshuser
+	AllowUsers sshuser
+
+Ограничьте ввод попыток до 2
+	MaxAuthTries 6 --> 2
+
+Баннер		
+	#Banner none ---> Banner /etc/openssh/banner
+
+		++++++++++
+systemctl restart sshd
