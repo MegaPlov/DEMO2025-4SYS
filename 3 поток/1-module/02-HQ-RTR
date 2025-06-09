@@ -97,7 +97,7 @@ HQ-RTR.au-team.irpo(config)#ip domain-name au-team.irpo
 
 -------настройка маршрута по умолчанию---------13.4.4 Маршрут по умолчанию
 
-	(config)#ip route 0.0.0.0/0 172.16.4.1 description default
+	(config)#ip route 0.0.0.0/0 172.16.40.1 description default
 
 -------настройка туннеля GRE---------15.1 GRE
 
