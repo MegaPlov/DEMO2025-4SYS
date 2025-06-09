@@ -1,0 +1,7 @@
+==========HQ-CLI==========
+
+-------имя хоста/NTP---------
+hostnamectl hostname HQ-CLI.au-team.irpo; exec bash
+timedatectl set-timezone Europe/Moscow
+
+ПОСЛЕ ОТКРЫВАЕМ АЛЬТЕРАТОР И НАСТРАИВАЕМ ВРУЧНУЮ (см файл ACC.png)
