@@ -2,3 +2,4 @@
 Строчку "proxy_pass http://192.168.3.10:8080" в proxy.conf меняем на "proxy_pass http://192.168.3.10:8086" и в след раз, если видим 8080, то меняем на 8086
 Команду docker-compose пишем БЕЗ ТИРЕ, вот так - docker compose
 В решение с дисками и созданием рейдов используется raid5, а нужен raid1. Монтирование на cli так же raid5, вместо необходимого raid1
+mdadm --create /dev/md0 --level=1 --raid-devices=3 /dev/sd[b-d]
